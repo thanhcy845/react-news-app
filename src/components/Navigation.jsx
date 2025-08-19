@@ -51,7 +51,7 @@ function Navigation({ currentPage, setCurrentPage }) {
   return (
     <nav className="navigation">
       <div className="nav-container">
-        <h2 className="nav-logo">MyApp</h2>
+        <h2 className="nav-logo">Tech News Hub</h2>
         <ul className="nav-menu">
           <li className="nav-item">
             <a
@@ -77,6 +77,15 @@ function Navigation({ currentPage, setCurrentPage }) {
             <>
               <li className="nav-item">
                 <a
+                  href="#create-post"
+                  className={currentPage === 'create-post' ? 'nav-link active' : 'nav-link'}
+                  onClick={(e) => handleNavClick(e, 'create-post')}
+                >
+                  Tạo bài viết
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
                   href="#profile"
                   className={currentPage === 'profile' ? 'nav-link active' : 'nav-link'}
                   onClick={(e) => handleNavClick(e, 'profile')}
@@ -86,7 +95,7 @@ function Navigation({ currentPage, setCurrentPage }) {
               </li>
               <li className="nav-item">
                 <span className="nav-user-info">
-                  Xin chào, {currentUser?.fullName}
+                  Xin chào, {currentUser?.name}
                 </span>
               </li>
               <li className="nav-item">

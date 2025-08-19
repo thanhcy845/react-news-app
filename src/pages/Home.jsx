@@ -18,27 +18,27 @@ function Home() {
           <h3>Khám phá nội dung đa dạng:</h3>
           <div className="features-grid">
             <div className="feature-card">
-              <h4>📰 Tin tức công nghệ</h4>
+              <h4>Tin tức công nghệ</h4>
               <p>Cập nhật những tin tức mới nhất về React, JavaScript, Web Development</p>
             </div>
 
             <div className="feature-card">
-              <h4>� Xu hướng mới</h4>
+              <h4>Xu hướng mới</h4>
               <p>Khám phá các xu hướng công nghệ và framework đang hot</p>
             </div>
 
             <div className="feature-card">
-              <h4>� Hướng dẫn</h4>
+              <h4>Hướng dẫn</h4>
               <p>Các bài hướng dẫn chi tiết về lập trình và phát triển web</p>
             </div>
 
             <div className="feature-card">
-              <h4>⚡ Performance</h4>
+              <h4>Performance</h4>
               <p>Tips và tricks để tối ưu hóa hiệu suất ứng dụng</p>
             </div>
 
             <div className="feature-card">
-              <h4>🎨 CSS & Design</h4>
+              <h4>CSS & Design</h4>
               <p>Thiết kế giao diện đẹp với CSS Grid, Flexbox và các kỹ thuật hiện đại</p>
             </div>
           </div>

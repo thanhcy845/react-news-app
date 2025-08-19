@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import Auth from './pages/Auth'
 import Profile from './pages/Profile'
 import News from './pages/News'
+import CreatePost from './pages/CreatePost'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
@@ -15,7 +16,7 @@ function App() {
   useEffect(() => {
     // Track page view when currentPage changes
     if (typeof window.gtag !== 'undefined') {
-      window.gtag('config', 'G-ZB3F0XHMKX', {
+      window.gtag('config', 'G-3Q7BYMC575', {
         page_title: currentPage,
         page_location: window.location.href
       });
@@ -33,6 +34,8 @@ function App() {
         return <Profile />
       case 'news':
         return <News />
+      case 'create-post':
+        return <CreatePost />
       default:
         return <Home />
     }

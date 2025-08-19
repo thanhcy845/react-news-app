@@ -168,7 +168,7 @@ function Auth() {
       <div className="page-container">
         <div className="auth-container">
           <div className="auth-success">
-            <div className="success-icon">✅</div>
+            <div className="success-icon">✓</div>
             <h1>Chào mừng, {user.name}!</h1>
             <p>Bạn đã đăng nhập thành công vào hệ thống.</p>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Import local images for news articles
 import reactImage from '../img/logo.png'; // Using logo as React placeholder
@@ -63,12 +63,35 @@ function News() {
 
   const [selectedNews, setSelectedNews] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('Tất cả');
+  const [userArticles, setUserArticles] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const categories = ['Tất cả', 'Công nghệ', 'Lập trình', 'Xu hướng', 'Hướng dẫn', 'CSS'];
 
-  const filteredNews = selectedCategory === 'Tất cả' 
-    ? newsData 
-    : newsData.filter(news => news.category === selectedCategory);
+  // Load user articles and current user on component mount
+  useEffect(() => {
+    // Load user articles from localStorage
+    const savedUserArticles = localStorage.getItem('userArticles');
+    if (savedUserArticles) {
+      setUserArticles(JSON.parse(savedUserArticles));
+    }
+
+    // Load current user
+    const loggedInUser = localStorage.getItem('currentUser');
+    if (loggedInUser) {
+      setCurrentUser(JSON.parse(loggedInUser));
+    }
+  }, []);
+
+  // Combine default news with user articles (published only)
+  const allNews = [
+    ...newsData,
+    ...userArticles.filter(article => !article.isDraft)
+  ];
+
+  const filteredNews = selectedCategory === 'Tất cả'
+    ? allNews
+    : allNews.filter(news => news.category === selectedCategory);
 
   const handleNewsClick = (news) => {
     setSelectedNews(news);
@@ -76,6 +99,23 @@ function News() {
 
   const handleBackToList = () => {
     setSelectedNews(null);
+  };
+
+  // Handle deleting user article
+  const handleDeleteArticle = (articleId) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa bài viết này?')) {
+      const updatedArticles = userArticles.filter(article => article.id !== articleId);
+      setUserArticles(updatedArticles);
+      localStorage.setItem('userArticles', JSON.stringify(updatedArticles));
+      setSelectedNews(null); // Go back to list if viewing deleted article
+    }
+  };
+
+  // Handle editing user article (placeholder for future implementation)
+  const handleEditArticle = (articleId) => {
+    // For now, just show an alert. In a full implementation,
+    // this would navigate to an edit form
+    alert('Tính năng chỉnh sửa sẽ được phát triển trong phiên bản tiếp theo!');
   };
 
   if (selectedNews) {
@@ -100,11 +140,33 @@ function News() {
             <div className="news-content">
               <p className="news-summary">{selectedNews.summary}</p>
               <p>{selectedNews.content}</p>
-              
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-              
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+              {!selectedNews.isUserGenerated && (
+                <>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+
+                  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </>
+              )}
             </div>
+
+            {/* Show edit/delete buttons for user's own articles */}
+            {selectedNews.isUserGenerated && currentUser && selectedNews.authorId === currentUser.id && (
+              <div className="user-article-actions">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleEditArticle(selectedNews.id)}
+                >
+                  Chỉnh sửa
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleDeleteArticle(selectedNews.id)}
+                >
+                  Xóa bài viết
+                </button>
+              </div>
+            )}
           </article>
         </div>
       </div>
@@ -133,7 +195,11 @@ function News() {
 
         <div className="news-grid">
           {filteredNews.map(news => (
-            <div key={news.id} className="news-card" onClick={() => handleNewsClick(news)}>
+            <div
+              key={news.id}
+              className={`news-card ${news.isUserGenerated ? 'user-generated' : ''}`}
+              onClick={() => handleNewsClick(news)}
+            >
               <img src={news.image} alt={news.title} className="news-image" />
               
               <div className="news-card-content">
